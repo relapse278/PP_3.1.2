@@ -1,9 +1,11 @@
 package com.example.PP_312.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,15 +54,27 @@ public class UserController {
         return "/edit";
     }
 
+//    @PostMapping("/users/edit")
+//    public String updateUser(@RequestParam long id,
+//                             @RequestParam String firstName,
+//                             @RequestParam String lastName,
+//                             @RequestParam String email) {
+//        User updatedUser = userService.getUserById(id);
+//        updatedUser.setFirstName(firstName);
+//        updatedUser.setLastName(lastName);
+//        updatedUser.setEmail(email);
+//        userService.updateUser(updatedUser);
+//        return "redirect:/users";
+//    }
     @PostMapping("/users/edit")
-    public String submitForm(@RequestParam long id,
-                             @RequestParam String firstName,
-                             @RequestParam String lastName,
-                             @RequestParam String email) {
-        User updatedUser = userService.getUserById(id);
-        updatedUser.setFirstName(firstName);
-        updatedUser.setLastName(lastName);
-        updatedUser.setEmail(email);
+    public String updateUser(@ModelAttribute("user") User user) {
+        User updatedUser = userService.getUserById(user.getId());
+//        final User updatedUser = new ObjectMapper().setDateFormat(simpleDateFormat).readValue(user, User.class);
+//        User updatedUser = objectMapper.readValue(user, User.class);
+//        User updatedUser = userService.getUserById(user.getId());
+        updatedUser.setFirstName(user.getFirstName());
+        updatedUser.setLastName(user.getLastName());
+        updatedUser.setEmail(user.getEmail());
         userService.updateUser(updatedUser);
         return "redirect:/users";
     }
